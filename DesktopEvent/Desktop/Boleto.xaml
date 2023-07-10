@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="Boleto" Height="450" Width="800">
     <Grid>
-        <Grid Background="White">
+        <Grid Background="DarkViolet">
             <StackPanel>
+
                 <Label Content="Nombre del Evento" Margin="0,0,600,0" />
                 <TextBlock x:Name="txtNombreEventoTB" Foreground="#FF171717"  Margin="0,0,600,0" Background="White" />
-
                 <Label Content="Cantidad de Boletos" Margin="0,0,600,0" />
                 <TextBox x:Name="txtCantidadBoletosTB" Foreground="#FF171616" Margin="0,0,600,0"/>
 

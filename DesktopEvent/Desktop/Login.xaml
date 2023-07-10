@@ -138,7 +138,7 @@
 
 
 
-                    <TextBlock Text="Username"
+                    <TextBlock Text="Usuario"
                                Foreground="DarkGray"
                                FontSize="12"
                                FontWeight="Medium"
@@ -163,7 +163,7 @@
 
 
 
-                    <TextBlock Text="Password"
+                    <TextBlock Text="Contraseña"
                                Foreground="DarkGray"
                                FontSize="12"
                                FontWeight="Medium"
