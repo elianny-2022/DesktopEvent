@@ -1,6 +1,6 @@
 ﻿Imports System.Net.Http
 Imports System.Text
-Imports Newtonsoft.Json
+Imports System.Text.Json
 
 Class Eventos
     Public Property Eventos As List(Of Evento)
@@ -32,7 +32,7 @@ Class Eventos
 
             client.BaseAddress = New Uri("http://localhost:8080/")
 
-            Dim jsonEvento As String = JsonConvert.SerializeObject(evento)
+            Dim jsonEvento As String = JsonSerializer.Serialize(evento)
             Dim content = New StringContent(jsonEvento, Encoding.UTF8, "application/json")
 
 
@@ -40,11 +40,17 @@ Class Eventos
 
             If response.IsSuccessStatusCode Then
                 MessageBox.Show("El evento ha sido guardado correctamente.")
-                Dim boletosWindow As New Boleto()
-                boletosWindow.txtNombreEventoTB.Text = txtNombreEventoTB.Text
-                boletosWindow.Evento = evento
-                boletosWindow.Show()
-                Close()
+                Dim boletosGuardado As HttpResponseMessage = Await client.GetAsync("/eventos/evento/list")
+                If boletosGuardado.IsSuccessStatusCode Then
+                    Dim responseContent As String = Await boletosGuardado.Content.ReadAsStringAsync()
+                    Dim boletosEnApi As List(Of Evento) = JsonSerializer.Deserialize(Of List(Of Evento))(responseContent)
+
+                    Dim boletosWindow As New Boleto(boletosEnApi.LastOrDefault())
+                    boletosWindow.txtNombreEventoTB.Text = txtNombreEventoTB.Text
+                    boletosWindow.Show()
+                    Close()
+                End If
+
             Else
                 MessageBox.Show("No se pudo guardar el evento. Inténtalo nuevamente.")
             End If
@@ -68,7 +74,7 @@ Class Eventos
 
             If response.IsSuccessStatusCode Then
                 Dim responseContent As String = response.Content.ReadAsStringAsync().Result
-                Eventos = JsonConvert.DeserializeObject(Of List(Of Evento))(responseContent)
+                Eventos = JsonSerializer.Deserialize(Of List(Of Evento))(responseContent)
                 dgEventos.ItemsSource = Eventos
             Else
                 MessageBox.Show("No se pudo obtener los eventos.")
